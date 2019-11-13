@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region us-east-2)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t desafio-ripley-backend .
+      - docker tag desafio-ripley-backend:latest 492238322483.dkr.ecr.us-east-2.amazonaws.com/desafio-ripley-backend:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 492238322483.dkr.ecr.us-east-2.amazonaws.com/desafio-ripley-backend:latest
+      #- aws ecs update-service --force-new-deployment --region "us-east-2" --cluster "optisteel-cluster" --service "optisteel-ecs-service-v6-api"  --task-definition "optisteel-task-api:8"
+
+#artifacts:
+#  files:
+#    - '**/*'
