@@ -19,7 +19,7 @@ ssm.getParameters(params, (err, data) => {
     return
   }
 
-  let redisClient = redis.createClient(data);
+  let redisClient = redis.createClient(data.Parameters[0].Value);
 
   redisClient.on("error", function (err) {
     console.log("Error: " + err);
