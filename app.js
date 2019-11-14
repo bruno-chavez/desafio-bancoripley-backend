@@ -1,3 +1,5 @@
+"use strict";
+
 // dependencies
 let express = require('express');
 let path = require('path');
