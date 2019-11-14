@@ -1,22 +1,35 @@
 "use strict";
 
-const redisClient = require('../cache/cache');
 const axios = require('axios');
 
-const fetchProduct = async function (id) {
 
-  let err, cachedProduct = await redisClient.get(id);
+const fetchProduct = async function (id) {
+  const client = await require('../cache/cache');
+
+  let err, cachedProduct = await client.get(id);
   if (err) {
     console.log(err);
+    return
   }
 
   // if there are no matches in the cache, fetches the product from the API
-  if (cachedProduct === null) {
+  if (!cachedProduct) {
     console.log('fetching from api');
-    let apiProduct = await axios.get(`https://simple.ripley.cl/api/v2/products/${id}`);
+    let apiProduct;
+    let flag = true;
+    while (flag) {
+      console.log(Math.floor(Math.random() * 100));
+      if (Math.floor(Math.random() * 100) <= 14) {
+        console.log('error on fetching data from the api');
+      } else {
+        apiProduct = await axios.get(`https://simple.ripley.cl/api/v2/products/${id}`);
+        console.log(apiProduct);
+        flag = false;
+      }
+    }
 
     // EX 10 sets an expiration time of 10 seconds
-    redisClient.set(id, apiProduct, 'EX', 10);
+    client.set(id, apiProduct.toString(), 'EX', 10);
     return apiProduct
   }
 

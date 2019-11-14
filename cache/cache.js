@@ -3,27 +3,45 @@
 const redis = require('redis');
 const AWS = require('aws-sdk');
 
-
 const ssm = new AWS.SSM();
 
-const params = {
-  Names: ['desafio-ripley-cache'],
-  WithDecryption: true
-};
+async function getParameter() {
 
-ssm.getParameters(params, (err, data) => {
-  console.log(data);
-  if (err) {
-    console.log("failed to connect to ElastiCache");
-    console.log(err);
-    return
-  }
+  let params = {
+    Name: 'desafio-ripley-cache',
+    WithDecryption: true
+  };
 
-  let redisClient = redis.createClient(data.Parameters[0].Value);
+  let request = await ssm.getParameter(params).promise();
 
-  redisClient.on("error", function (err) {
+  return request.Parameter.Value;
+}
+
+module.exports = (async function () {
+  let host = await getParameter();
+  let client = redis.createClient(6379, host);
+
+  client.on("error", function (err) {
     console.log("Error: " + err);
   });
 
-  module.exports = redisClient;
-});
+  return client
+})();
+
+/*class RedisClient {
+  constructor() {
+    let self = this;
+    let params = {
+      Name: 'desafio-ripley-cache',
+      WithDecryption: true
+    };
+
+    ssm.getParameter(params, function(err, data) {
+      self.client = redis.createClient(6379, data.Parameter.Value)
+    });
+  }
+}
+
+let c = new RedisClient();
+console.log(c, 'on cache');
+module.exports = c;*/
