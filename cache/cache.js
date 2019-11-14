@@ -1,27 +1,28 @@
+"use strict";
+
 const redis = require('redis');
 const AWS = require('aws-sdk');
 
-let params = {
+
+const ssm = new AWS.SSM();
+
+const params = {
   Names: ['desafio-ripley-cache'],
   WithDecryption: true
 };
 
-let redisClient = redis.createClient();
-const ssm = new AWS.SSM();
-
-ssm.getParameters(params, function (err, data) {
+ssm.getParameters(params, (err, data) => {
   if (err) {
-    console.log(err, err.stack);
-  } else {
-    console.log(data);
-     redisClient = redis.createClient(data);
+    console.log("failed to connect to ElastiCache");
+    console.log(err);
+    return
   }
+
+  let redisClient = redis.createClient(data);
+
+  redisClient.on("error", function (err) {
+    console.log("Error: " + err);
+  });
+
+  module.exports = redisClient;
 });
-
-redisClient.on("error", function (err) {
-  console.log("Error: " + err);
-});
-
-console.log(redisClient);
-
-module.exports = redisClient;
