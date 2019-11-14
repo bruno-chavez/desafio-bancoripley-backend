@@ -26,7 +26,7 @@ const fetchProduct = async function (id) {
 
 /*const fetchProduct = function (id) {
 
-  let product = {};
+  let product;
 
   redisClient.get(id, (err, cachedProduct) => {
     if (err) {

@@ -12,6 +12,7 @@ const params = {
 };
 
 ssm.getParameters(params, (err, data) => {
+  console.log(data);
   if (err) {
     console.log("failed to connect to ElastiCache");
     console.log(err);
