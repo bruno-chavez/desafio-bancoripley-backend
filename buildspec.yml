@@ -19,7 +19,7 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push 492238322483.dkr.ecr.us-east-2.amazonaws.com/desafio-ripley-backend:latest
-      #- aws ecs update-service --force-new-deployment --region "us-east-2" --cluster "optisteel-cluster" --service "optisteel-ecs-service-v6-api"  --task-definition "optisteel-task-api:8"
+      - aws ecs update-service --force-new-deployment --region "us-east-2" --cluster "desafio-ripley-ecs-cluster" --service "desafio-ripley-api-service"  --task-definition "desafio-ripley-api-task"
 
 #artifacts:
 #  files:
