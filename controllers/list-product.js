@@ -4,9 +4,10 @@ const fetchProduct = require('../repository/product');
 
 const listByPartNumber = async (req, res, next) => {
   try {
+    console.log('request');
     let product = await fetchProduct(req.params.part_number);
+
     await res.json(product);
-    res.sendStatus(200);
   } catch (e) {
     console.log(e.message, 'error at controller');
     res.sendStatus(500)

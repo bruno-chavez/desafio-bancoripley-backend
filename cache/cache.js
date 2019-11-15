@@ -1,6 +1,6 @@
 "use strict";
 
-const redis = require('redis');
+const asyncRedis = require("async-redis");
 const AWS = require('aws-sdk');
 
 const ssm = new AWS.SSM();
@@ -19,7 +19,7 @@ async function getParameter() {
 
 module.exports = (async function () {
   let host = await getParameter();
-  let client = redis.createClient(6379, host);
+  let client = asyncRedis.createClient(6379, host);
 
   client.on("error", function (err) {
     console.log("Error: " + err);

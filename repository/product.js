@@ -6,35 +6,28 @@ const axios = require('axios');
 const fetchProduct = async function (id) {
   const client = await require('../cache/cache');
 
-  let err, cachedProduct = await client.get(id);
-  if (err) {
-    console.log(err, 'err at caching');
-    return
-  }
+  let cachedProduct = await client.get(id);
 
   // if there are no matches in the cache, fetches the product from the API
-  if (!cachedProduct) {
+  if (cachedProduct === null) {
     console.log('fetching from api');
     let apiProduct;
     let flag = true;
     while (flag) {
-      console.log(Math.floor(Math.random() * 100));
       if (Math.floor(Math.random() * 100) <= 14) {
         console.log('error on fetching data from the api');
       } else {
         apiProduct = await axios.get(`https://simple.ripley.cl/api/v2/products/${id}`);
-        console.log(apiProduct.data);
         flag = false;
       }
     }
 
     // EX 10 sets an expiration time of 10 seconds
     client.set(id, apiProduct.data.toString(), 'EX', 10);
-    return apiProduct
+    return apiProduct.data
   }
 
   console.log('fetching from cache');
-  console.log(cachedProduct);
   return cachedProduct;
 };
 
