@@ -8,7 +8,7 @@ const fetchProduct = async function (id) {
 
   let err, cachedProduct = await client.get(id);
   if (err) {
-    console.log(err);
+    console.log(err, 'err at caching');
     return
   }
 
@@ -23,17 +23,18 @@ const fetchProduct = async function (id) {
         console.log('error on fetching data from the api');
       } else {
         apiProduct = await axios.get(`https://simple.ripley.cl/api/v2/products/${id}`);
-        console.log(apiProduct);
+        console.log(apiProduct.data);
         flag = false;
       }
     }
 
     // EX 10 sets an expiration time of 10 seconds
-    client.set(id, apiProduct.toString(), 'EX', 10);
+    client.set(id, apiProduct.data.toString(), 'EX', 10);
     return apiProduct
   }
 
   console.log('fetching from cache');
+  console.log(cachedProduct);
   return cachedProduct;
 };
 
