@@ -18,3 +18,4 @@ Back-end para Desafio Ripley Transformacion Digital, utiliza varios servicios de
 + ECS Fargate para el manejo de las imagenes Docker de la API, con este servicio puedo hostear la API sin provicionar servers.
 + ECR para tener un registro y versionado de las imagenes Docker de la API, se utiliza como referencia para hacer deploys de la API
 + CodeBuild servicio de CI/CD, despues de cada commit a GitHub, se crea una build, donde se crea una imagen Docker con los ultimos cambios, se almacena en ECR y se indica a ECS que haga un nuevo deploy
++ SSM Parameter Store gracias a este servicio, puedo tener todos los secretos (en este caso la direccion de conexion a Elasticache) en AWS sin tener que subirlos a Git y exponer informacion
