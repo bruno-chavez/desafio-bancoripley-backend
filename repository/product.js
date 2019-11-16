@@ -23,12 +23,12 @@ const fetchProduct = async function (id) {
     }
 
     // EX 10 sets an expiration time of 10 seconds
-    client.set(id, apiProduct.data.toString(), 'EX', 10);
+    client.set(id, JSON.stringify(apiProduct.data), 'EX', 15);
     return apiProduct.data
   }
 
   console.log('fetching from cache');
-  return cachedProduct;
+  return JSON.parse(cachedProduct);
 };
 
 /*const fetchProduct = function (id) {
