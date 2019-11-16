@@ -17,6 +17,7 @@ async function getParameter() {
   return request.Parameter.Value;
 }
 
+// Sets up a connection to ElastiCache once for the entire API
 module.exports = (async function () {
   let host = await getParameter();
   let client = asyncRedis.createClient(6379, host);
@@ -27,21 +28,3 @@ module.exports = (async function () {
 
   return client
 })();
-
-/*class RedisClient {
-  constructor() {
-    let self = this;
-    let params = {
-      Name: 'desafio-ripley-cache',
-      WithDecryption: true
-    };
-
-    ssm.getParameter(params, function(err, data) {
-      self.client = redis.createClient(6379, data.Parameter.Value)
-    });
-  }
-}
-
-let c = new RedisClient();
-console.log(c, 'on cache');
-module.exports = c;*/

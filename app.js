@@ -18,7 +18,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors(
   {
-    origin: ["http://localhost:4200", "http://desafio-ripley-frontend.s3-website.us-east-2.amazonaws.com"],
+    origin: ["http://localhost:4200",
+      "http://desafio-ripley-frontend.s3-website.us-east-2.amazonaws.com"
+    ],
     credentials: true
   }
 ));

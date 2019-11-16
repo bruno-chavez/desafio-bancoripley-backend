@@ -10,51 +10,25 @@ const fetchProduct = async function (id) {
 
   // if there are no matches in the cache, fetches the product from the API
   if (cachedProduct === null) {
-    console.log('fetching from api');
     let apiProduct;
     let flag = true;
+
+    // this while simulates a 15% error on consulting the API
     while (flag) {
       if (Math.floor(Math.random() * 100) <= 14) {
-        console.log('error on fetching data from the api');
+        console.log('error on fetching data from the api, retrying...');
       } else {
         apiProduct = await axios.get(`https://simple.ripley.cl/api/v2/products/${id}`);
         flag = false;
       }
     }
 
-    // EX 10 sets an expiration time of 10 seconds
-    client.set(id, JSON.stringify(apiProduct.data), 'EX', 15);
+    // EX 120 sets an expiration time of 120 seconds
+    client.set(id, JSON.stringify(apiProduct.data), 'EX', 120);
     return apiProduct.data
   }
 
-  console.log('fetching from cache');
   return JSON.parse(cachedProduct);
 };
-
-/*const fetchProduct = function (id) {
-
-  let product;
-
-  redisClient.get(id, (err, cachedProduct) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-
-    // if there are no matches in the cache, product gets fetched from the API
-    if (cachedProduct === null) {
-      axios.get(`https://simple.ripley.cl/api/v2/products/${id}`).then(apiProduct => {
-        product = apiProduct;
-
-        // EX 10 sets an expiration time of 10 seconds
-        redisClient.set(id, apiProduct, 'EX', 10);
-      });
-    } else {
-      product = cachedProduct;
-    }
-  });
-
-  return product
-};*/
 
 module.exports = fetchProduct;
