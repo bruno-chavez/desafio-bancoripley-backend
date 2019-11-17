@@ -5,6 +5,11 @@
 Back-end para Desafio Ripley Transformacion Digital, utiliza varios servicios de AWS para el hosting de las distintas tecnologias, NodeJs y Express para la creacion de la API, Docker para encapsular la API en un container y Redis para almacenar en cache consultas recientes.
 
 En la carpeta `docs` se encuentran un par de archivos que detallan la arquitectura utilizada en el desafio, ademas de incluir los logs cuando la API "falla" al tratar de ser consumida y tambien el flow de CI/CD utilizado para el build y deployment de tanto el backend como el frontend.
+
+# URL
+
+http://desafio-ripley-alb-720130574.us-east-2.elb.amazonaws.com
+
 # Endpoints
 
 ### `GET /`
